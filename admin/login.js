@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:3000/api';
+const API_BASE_URL = 'https://kamsiexp.onrender.com/api';
 const TOKEN_KEY = 'admin_token';
 const TOKEN_EXPIRY_KEY = 'admin_token_expiry';
 const TOKEN_DURATION = 24 * 60 * 60 * 1000; // 24 hours in milliseconds

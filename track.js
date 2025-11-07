@@ -3,7 +3,7 @@
 // API Configuration - Update this if your backend is on a different URL
 const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
     ? 'http://localhost:3000' 
-    : 'https://your-backend-domain.com'; // Update with your production backend URL
+    : 'https://kamsiexp.onrender.com'; // Update with your production backend URL
 
 // DOM Elements
 const trackingForm = document.getElementById('trackingFormContainer');
