@@ -1,0 +1,21 @@
+{
+  "name": "tracking",
+  "version": "1.0.0",
+  "description": "Shippment tracking website",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "test": "npm start"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.20.0",
+    "nanoid": "^5.1.6",
+    "nodemailer": "^6.10.1"
+  }
+}

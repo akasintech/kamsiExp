@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Cargo Tracking</title>
+    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+    <div class="admin-container">
+        <header class="admin-header">
+            <h1>KamsiExpress Admin Panel</h1>
+        </header>
+
+        <div class="tabs">
+            <button class="tab-button active" data-tab="dashboard">Dashboard</button>
+            <button class="tab-button" data-tab="add-tracking">Add Tracking ID</button>
+        </div>
+
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="tab-content active">
+            <div class="dashboard-header">
+                <h2>All Tracking Records</h2>
+                <button class="refresh-btn" id="refreshBtn" style="background-color: transparent; color: var(--text-primary);"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-refresh-cw"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></button>
+            </div>
+            
+            <div class="loading" id="loading">Loading...</div>
+            <div class="error-message" id="errorMessage"></div>
+            
+            <div class="records-container" id="recordsContainer">
+                <!-- Records will be dynamically inserted here -->
+            </div>
+        </div>
+
+        <!-- Add Tracking Tab -->
+        <div id="add-tracking" class="tab-content">
+            <div class="form-container">
+                <h2>Add New Tracking Record</h2>
+                <form id="addTrackingForm" class="tracking-form">
+                    <div class="form-section">
+                        <h3>Sender Information</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="senderName">Sender Name *</label>
+                                <input type="text" id="senderName" name="senderName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="senderEmail">Sender Email *</label>
+                                <input type="email" id="senderEmail" name="senderEmail" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="senderContact">Sender Contact *</label>
+                                <input type="text" id="senderContact" name="senderContact" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="senderAddress">Sender Address *</label>
+                                <input type="text" id="senderAddress" name="senderAddress" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Receiver Information</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="receiverName">Receiver Name *</label>
+                                <input type="text" id="receiverName" name="receiverName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="receiverEmail">Receiver Email *</label>
+                                <input type="email" id="receiverEmail" name="receiverEmail" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="receiverContact">Receiver Contact *</label>
+                                <input type="text" id="receiverContact" name="receiverContact" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="receiverAddress">Receiver Address *</label>
+                                <input type="text" id="receiverAddress" name="receiverAddress" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Package Information</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="packageDesc">Package Description *</label>
+                                <textarea id="packageDesc" name="packageDesc" rows="3" required></textarea>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="dispatchLocation">Dispatch Location *</label>
+                                <input type="text" id="dispatchLocation" name="dispatchLocation" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="status">Status *</label>
+                                <select id="status" name="status" required>
+                                    <option value="pending">Pending</option>
+                                    <option value="preparing">Preparing</option>
+                                    <option value="in-transit">In Transit</option>
+                                    <option value="at-transshipment">At Transshipment</option>
+                                    <option value="arrived">Arrived</option>
+                                    <option value="delivered">Delivered</option>    
+                                    <option value="customs-clearance">Customs Clearance</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="dispatchDate">Dispatch Date *</label>
+                                <input type="date" id="dispatchDate" name="dispatchDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="estimatedArrivalDate">Estimated Arrival Date *</label>
+                                <input type="date" id="estimatedArrivalDate" name="estimatedArrivalDate" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="submit-btn">Add Tracking Record</button>
+                        <button type="reset" class="reset-btn">Clear Form</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Confirm Delete</h3>
+                <button class="close-btn" id="closeDeleteModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete tracking ID: <strong id="deleteTrackingId"></strong>?</p>
+                <p class="warning-text">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelDeleteBtn">Cancel</button>
+                <button class="btn-danger" id="confirmDeleteBtn">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3>Edit Tracking Record</h3>
+                <button class="close-btn" id="closeEditModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="tracking-id-display">
+                    <strong>Tracking ID:</strong> <span id="editTrackingIdDisplay"></span>
+                    <small>(Cannot be changed)</small>
+                </div>
+                <form id="editTrackingForm" class="tracking-form">
+                    <input type="hidden" id="editTrackingId" name="trackingId">
+                    
+                    <div class="form-section">
+                        <h3>Sender Information</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="editSenderName">Sender Name *</label>
+                                <input type="text" id="editSenderName" name="senderName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editSenderEmail">Sender Email *</label>
+                                <input type="email" id="editSenderEmail" name="senderEmail" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="editSenderContact">Sender Contact *</label>
+                                <input type="text" id="editSenderContact" name="senderContact" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editSenderAddress">Sender Address *</label>
+                                <input type="text" id="editSenderAddress" name="senderAddress" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Receiver Information</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="editReceiverName">Receiver Name *</label>
+                                <input type="text" id="editReceiverName" name="receiverName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editReceiverEmail">Receiver Email *</label>
+                                <input type="email" id="editReceiverEmail" name="receiverEmail" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="editReceiverContact">Receiver Contact *</label>
+                                <input type="text" id="editReceiverContact" name="receiverContact" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editReceiverAddress">Receiver Address *</label>
+                                <input type="text" id="editReceiverAddress" name="receiverAddress" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Package Information</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="editPackageDesc">Package Description *</label>
+                                <textarea id="editPackageDesc" name="packageDesc" rows="3" required></textarea>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="editDispatchLocation">Dispatch Location *</label>
+                                <input type="text" id="editDispatchLocation" name="dispatchLocation" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editStatus">Status *</label>
+                                <select id="editStatus" name="status" required>
+                                    <option value="preparing">Preparing</option>
+                                    <option value="picked-up">Picked Up</option>
+                                    <option value="in-transit">In Transit</option>
+                                    <option value="at-transshipment">At Transshipment</option>
+                                    <option value="customs-clearance">Customs Clearance</option>
+                                    <option value="arrived">Arrived</option>
+                                    <option value="delivered">Delivered</option>
+                                    <option value="pending">Pending</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="editDispatchDate">Dispatch Date *</label>
+                                <input type="date" format="DD-MM-YYYY" id="editDispatchDate" name="dispatchDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editEstimatedArrivalDate">Estimated Arrival Date *</label>
+                                <input type="date" format="DD-MM-YYYY" id="editEstimatedArrivalDate" name="estimatedArrivalDate" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" id="cancelEditBtn">Cancel</button>
+                        <button type="submit" class="submit-btn">Update Record</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success/Error Toast -->
+    <div id="toast" class="toast"></div>
+    
+    <script src="admin.js"></script>
+</body>
+</html>

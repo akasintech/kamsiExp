@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="track.css">
+    <link rel="stylesheet" href="components.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <title>Track Shipment - KamsiExpress</title>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar track-navbar" id='nav'>
+        
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-left">
+                <h1 class="hero-title">Track Shipment</h1>
+            </div>
+            <div class="hero-right">
+                <div class="breadcrumbs">
+                    <span class="breadcrumb-item">HOME</span>
+                    <span class="breadcrumb-separator">→</span>
+                    <span class="breadcrumb-item active">TRACK SHIPMENT</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tracking Form Section -->
+    <section class="tracking-form-section">
+        <div class="container">
+            <div class="tracking-form-container" id="trackingFormContainer">
+                <label for="trackingInput" class="tracking-label">Tracking Number:</label>
+                <input 
+                    type="text" 
+                    id="trackingInput" 
+                    class="tracking-input" 
+                    placeholder="Enter your tracking number..." 
+                    autocomplete="off"
+                />
+                <button id="trackButton" class="btn-track">TRACK</button>
+            </div>
+
+            <!-- Loader -->
+            <div class="loader-container" id="loaderContainer" style="display: none;">
+                <div class="loader"></div>
+                <p class="loader-text">Tracking your shipment...</p>
+            </div>
+
+            <!-- Error Message -->
+            <div class="error-container" id="errorContainer" style="display: none;">
+                <div class="error-message">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span id="errorText"></span>
+                </div>
+                <button id="retryButton" class="btn-retry">Retry</button>
+            </div>
+
+            <!-- Package Details -->
+            <div class="package-details-container" id="packageDetailsContainer" style="display: none;">
+                <div class="package-header">
+                    <h2>Package Tracking Details</h2>
+                    <p class="tracking-id-display">Tracking ID: <strong id="displayTrackingId"></strong></p>
+                </div>
+
+                <div class="package-content">
+                    <div class="package-info-grid">
+                        <!-- Sender Information -->
+                        <div class="info-card">
+                            <h3 class="info-card-title">
+                                <i class="fas fa-user"></i> Sender Information
+                            </h3>
+                            <div class="info-card-content">
+                                <p><strong>Name:</strong> <span id="senderName"></span></p>
+                                <p><strong>Email:</strong> <span id="senderEmail"></span></p>
+                                <p><strong>Contact:</strong> <span id="senderContact"></span></p>
+                                <p><strong>Address:</strong> <span id="senderAddress"></span></p>
+                            </div>
+                        </div>
+
+                        <!-- Receiver Information -->
+                        <div class="info-card">
+                            <h3 class="info-card-title">
+                                <i class="fas fa-user-check"></i> Receiver Information
+                            </h3>
+                            <div class="info-card-content">
+                                <p><strong>Name:</strong> <span id="receiverName"></span></p>
+                                <p><strong>Email:</strong> <span id="receiverEmail"></span></p>
+                                <p><strong>Contact:</strong> <span id="receiverContact"></span></p>
+                                <p><strong>Address:</strong> <span id="receiverAddress"></span></p>
+                            </div>
+                        </div>
+
+                        <!-- Package Details -->
+                        <div class="info-card">
+                            <h3 class="info-card-title">
+                                <i class="fas fa-box"></i> Package Details
+                            </h3>
+                            <div class="info-card-content">
+                                <p><strong>Description:</strong> <span id="packageDesc"></span></p>
+                                <p><strong>Status:</strong> <span class="status-badge" id="packageStatus"></span></p>
+                                <p><strong>Dispatch Location:</strong> <span id="dispatchLocation"></span></p>
+                                <p><strong>Dispatch Date:</strong> <span id="dispatchDate"></span></p>
+                                <p><strong>Estimated Arrival:</strong> <span id="estimatedArrival"></span></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Google Maps -->
+                    <div class="map-container">
+                        <h3 class="map-title">
+                            <i class="fas fa-map-marker-alt"></i> Package Location
+                        </h3>
+                        <div id="map" class="map"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="track-footer" id='footer'>
+        
+    </footer>
+
+    <!-- Google Maps API -->
+    <!-- NOTE: Replace YOUR_API_KEY with your actual Google Maps API key -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places" async defer></script>
+    <script src='components.js'></script>
+    <script src="track.js"></script>
+</body>
+</html>
+

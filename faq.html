@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="components.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <title>FAQ - KamsiExpress</title>
+    <style>
+        .faq-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        .faq-item {
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        .faq-question {
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: var(--primary-color);
+            transition: background-color 0.3s;
+        }
+        .faq-question:hover {
+            background-color: var(--light-color);
+        }
+        .faq-question i {
+            transition: transform 0.3s;
+        }
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            color: var(--text-color);
+            line-height: 1.8;
+        }
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+            padding: 0 20px 20px 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar track-navbar" id="nav"></nav>
+
+    <section class="background-image">
+        <div class="background-oppacity">
+            <div class="background-flex">
+               <div>
+                 <h1 style="color: white;">Frequently Asked Questions</h1>
+               </div>
+               <div>
+                    <span class="home"><a href="index.html">Home</a> <i class="fa fa-arrow-right"></i></span>
+                    <span><a href="faq.html">FAQ</a></span>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <div class="faq-container">
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>How long does shipping take from USA to other countries?</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+                <p>Air freight shipments typically take 4-6 days for delivery, while ocean freight shipments take 4-6 weeks. Delivery times may vary based on destination, customs clearance, and service level selected.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>What is the free storage period for shipments?</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+                <p>KamsiExpress provides free storage for seven calendar days at our warehouses. After this period, storage charges will apply based on the duration of storage.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>How can I track my shipment?</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+                <p>You can track your shipment using the tracking number provided when your shipment is processed. Visit our Track Shipment page and enter your tracking number for real-time updates.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>What items are prohibited from shipping?</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+                <p>Prohibited items include hazardous materials, illegal substances, weapons, cash, perishable foods without proper refrigeration, and items restricted by destination country regulations. Please contact us for a complete list.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>Do you offer insurance for shipments?</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+                <p>Yes, we offer optional cargo insurance for your shipments. Insurance can be purchased when authorizing your shipment and is recommended for valuable items.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>What payment methods do you accept?</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+                <p>We accept various payment methods including cash, bank transfers, credit cards, and other approved payment methods. Payment terms can be discussed during shipment authorization.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>Can I consolidate multiple shipments?</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+                <p>Yes, KamsiExpress offers consolidation services to combine multiple shipments, which helps reduce shipping costs. Packages can be stored at our warehouse and shipped together.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>Do you provide packaging materials?</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+                <p>Yes, we provide standard packing and shipping materials at no cost. Additional protective materials are available at cost if needed for fragile or valuable items.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>What are your office locations and hours?</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+                <p>Our USA office is located at 1825 Pennsylvania Ave. Linden, New Jersey, 07036. Our Nigeria office is at Plot 5, Block 89F Famous, Enearu Street, Off Alakoso Avenue, Opp. ABC Trans. Terminal, Amuwo Odofin, Lagos. Business hours are Monday - Friday, 9:00 AM - 5:00 PM EST.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>How do I open an account with KamsiExpress?</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+                <p>To open an account, contact our customer service team via email at info@kamsiexpress.com or call +1 908 275 3675. You can also visit our office locations to open an account in person. Required information includes valid identification, contact details, and business documents if applicable.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>What happens if my shipment is delayed?</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+                <p>If your shipment experiences delays, we will notify you immediately. Delays can occur due to customs clearance, weather conditions, or carrier schedules. We work diligently to minimize delays and keep you informed throughout the process.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>Do you handle customs clearance?</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+                <p>Yes, KamsiExpress handles customs clearance for shipments. Our experienced customs agents expedite the clearance process while minimizing charges where possible. Additional customs duties and taxes may apply based on destination country regulations.</p>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="track-footer" id="footer"></footer>
+
+    <script src="components.js"></script>
+    <script>
+        function toggleFaq(element) {
+            const faqItem = element.parentElement;
+            const isActive = faqItem.classList.contains('active');
+            
+            // Close all FAQ items
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Open clicked item if it wasn't active
+            if (!isActive) {
+                faqItem.classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>
+

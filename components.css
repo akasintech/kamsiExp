@@ -1,0 +1,275 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Zalando+Sans+Expanded:ital,wght@0,200..900;1,200..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Zalando+Sans+Expanded:ital,wght@0,200..900;1,200..900&display=swap');
+       
+.track-navbar {
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+}
+
+.track-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: inherit;
+}
+
+.logo-box {
+    width: 60px;
+    height: 60px;
+    background-color: #1e40af;
+    border: 2px solid white;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.logo-icon {
+    font-size: 32px;
+    font-weight: bold;
+    color: white;
+}
+
+.logo-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.logo-name {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1e40af;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.logo-tagline {
+    font-size: 10px;
+    color: #3b82f6;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: -2px;
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    gap: 32px;
+    align-items: center;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: #1e3a8a;
+    font-weight: 500;
+    font-size: 14px;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #3b82f6;
+}
+
+.nav-link.active {
+    color: #1e3a8a;
+}
+
+.nav-link i {
+    font-size: 10px;
+    margin-left: 4px;
+}
+
+.track-active {
+    color: #f97316;
+}
+
+.btn-download-app {
+    background-color: #f97316;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-download-app:hover {
+    background-color: #ea580c;
+}
+
+/* Footer */
+.track-footer {
+    background-color: white;
+    padding: 50px 20px 20px;
+    margin-top: 60px;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    align-items: flex-start;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 40px;
+    padding-bottom: 30px;
+}
+
+.footer-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.footer-logo .logo-box {
+    width: 50px;
+    height: 50px;
+}
+
+.footer-logo .logo-icon {
+    font-size: 28px;
+}
+
+.footer-logo .logo-name {
+    font-size: 18px;
+}
+
+.footer-logo .logo-tagline {
+    font-size: 9px;
+}
+
+.footer-contact {
+    display: flex;
+    flex-direction: column;
+    text-align: start;
+    gap: 8px;
+    font-size: 14px;
+    color: #334155;
+    line-height: 1.6;
+}
+
+.footer-contact p {
+    margin: 0;
+}
+
+.footer-contact span {
+    color: #64748b;
+}
+
+.footer-heading {
+    color: #1e3a8a;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    text-align: start;
+}
+
+.footer-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.footer-list li a {
+    color: #334155;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s ease;
+}
+
+.footer-list li a:hover {
+    color: #1e3a8a;
+}
+
+.footer-copyright {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-top: 20px;
+    border-top: 1px solid #e2e8f0;
+    text-align: center;
+}
+
+.footer-copyright p {
+    color: #64748b;
+    font-size: 12px;
+    margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+        padding: 60px 20px;
+    }
+
+    .hero-title {
+        font-size: 36px;
+    }
+
+    .hero-right {
+        justify-content: flex-start;
+    }
+
+    .nav-menu {
+        gap: 20px;
+    }
+
+    .btn-download-app {
+        display: none;
+    }
+
+    .package-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: 28px;
+    }
+
+    .logo-name {
+        font-size: 16px;
+    }
+
+    .logo-tagline {
+        font-size: 8px;
+    }
+
+    .nav-menu {
+        gap: 12px;
+    }
+
+    .nav-link {
+        font-size: 12px;
+    }
+}
+
+
