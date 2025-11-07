@@ -14,7 +14,7 @@ app.use(express.json());
 // ✅ CORS (make sure this is before routes)
 app.use(
   cors({
-    origin: ["http://127.0.0.1:5500", "kamsiexp.netlify.app", "file:///C:/Users/Akasintech/Desktop/bootcamp/tracking/frontend/admin.html", "http://localhost:3000", "*"],
+    origin: ["http://127.0.0.1:5500", "https://kamsiexp.netlify.app", "file:///C:/Users/Akasintech/Desktop/bootcamp/tracking/frontend/admin.html", "http://localhost:3000", "*"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
