@@ -15,7 +15,7 @@ const errorText = document.getElementById('errorText');
 const retryButton = document.getElementById('retryButton');
 const packageDetailsContainer = document.getElementById('packageDetailsContainer');
 
-// Google Maps
+// Leaflet Map
 let map;
 let marker;
 
@@ -165,102 +165,64 @@ function formatDate(dateString) {
     }
 }
 
-// Initialize Google Map
-function initializeMap(packageData) {
-    // Get the location to display on map
-    // Priority: dispatchLocation > receiverAddress > senderAddress
+// Initialize Leaflet map with Nominatim geocoding
+async function initializeMap(packageData) {
     const locationString = packageData.dispatchLocation || 
                           packageData.receiverAddress || 
                           packageData.senderAddress || 
                           'New York, NY';
 
-    // Check if map is already initialized
     const mapElement = document.getElementById('map');
     if (!mapElement) {
         console.error('Map element not found');
         return;
     }
 
-    // Initialize map if not already done
+    // Create map if not exists
     if (!map) {
-        // Default center (can be changed based on geocoding)
-        const defaultCenter = { lat: 40.7128, lng: -74.0060 }; // New York City
-        
-        map = new google.maps.Map(mapElement, {
-            zoom: 12,
-            center: defaultCenter,
-            mapTypeControl: true,
-            streetViewControl: true,
-            fullscreenControl: true
-        });
+        map = L.map(mapElement).setView([40.7128, -74.0060], 12); // NYC default
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
     }
 
-    // Geocode the address to get coordinates
-    const geocoder = new google.maps.Geocoder();
-    
-    geocoder.geocode({ address: locationString }, function(results, status) {
-        if (status === 'OK' && results[0]) {
-            const location = results[0].geometry.location;
-            
-            // Center map on location
-            map.setCenter(location);
-            map.setZoom(14);
-            
-            // Remove existing marker if any
-            if (marker) {
-                marker.setMap(null);
+    // Geocode with Nominatim
+    try {
+        const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(locationString)}`;
+        const res = await fetch(url, {
+            headers: {
+                'Accept': 'application/json'
             }
-            
-            // Add marker
-            marker = new google.maps.Marker({
-                position: location,
-                map: map,
-                title: packageData.packageDesc || 'Package Location',
-                animation: google.maps.Animation.DROP
-            });
+        });
+        const results = await res.json();
 
-            // Add info window
-            const infoWindow = new google.maps.InfoWindow({
-                content: `
-                    <div style="padding: 10px;">
-                        <h3 style="margin: 0 0 8px 0; color: #1e3a8a;">Package Location</h3>
-                        <p style="margin: 0 0 4px 0;"><strong>Status:</strong> ${packageData.status || 'N/A'}</p>
-                        <p style="margin: 0 0 4px 0;"><strong>Location:</strong> ${locationString}</p>
-                        <p style="margin: 0;"><strong>Tracking ID:</strong> ${packageData.trackingId || 'N/A'}</p>
-                    </div>
-                `
-            });
+        let lat = 40.7128;
+        let lon = -74.0060;
 
-            marker.addListener('click', function() {
-                infoWindow.open(map, marker);
-            });
-
-            // Open info window by default
-            infoWindow.open(map, marker);
-        } else {
-            console.error('Geocoding failed:', status);
-            // Fallback to default location if geocoding fails
-            const defaultCenter = { lat: 40.7128, lng: -74.0060 };
-            map.setCenter(defaultCenter);
-            
-            if (marker) {
-                marker.setMap(null);
-            }
-            
-            marker = new google.maps.Marker({
-                position: defaultCenter,
-                map: map,
-                title: 'Package Location',
-                animation: google.maps.Animation.DROP
-            });
+        if (Array.isArray(results) && results.length > 0) {
+            lat = parseFloat(results[0].lat);
+            lon = parseFloat(results[0].lon);
         }
-    });
-}
 
-// Global function for Google Maps callback
-function initMap() {
-    // This function is called by Google Maps API KEY when it loads
-    // The map will be initialized when package details are displayed
-    console.log('Google Maps API loaded');
+        map.setView([lat, lon], 14);
+
+        if (marker) {
+            map.removeLayer(marker);
+        }
+
+        marker = L.marker([lat, lon]).addTo(map);
+        const popupHtml = `
+            <div style="padding: 6px 2px;">
+                <h3 style="margin: 0 0 6px 0; color: #1e3a8a; font-size: 14px;">Package Location</h3>
+                <p style="margin: 0 0 2px 0; font-size: 12px;"><strong>Status:</strong> ${packageData.status || 'N/A'}</p>
+                <p style="margin: 0 0 2px 0; font-size: 12px;"><strong>Location:</strong> ${locationString}</p>
+                <p style="margin: 0; font-size: 12px;"><strong>Tracking ID:</strong> ${packageData.trackingId || 'N/A'}</p>
+            </div>
+        `;
+        marker.bindPopup(popupHtml).openPopup();
+    } catch (e) {
+        console.error('Geocoding error', e);
+    }
 }
 

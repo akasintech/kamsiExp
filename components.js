@@ -65,8 +65,8 @@ const footerComponent = `
                     </a>
                 </div>
                 <div class="footer-contact">
-                    <p>Address 1: <span>1825 Pennsylvania Ave. Linden, New Jersey, 07036</span></p>
-                    <p>Address 2: <span>Plot 5, Block 89F Famous, Enearu Street, Off Alakoso Avenue, Opp. ABC Trans. Terminal, Amuwo Odofin, Lagos, Nigeria</span></p>
+      
+                    <p>5900 NW 97th Ave unit 1, Miami, FL 33178, United States</span></p>
                     <p>Email: <span>info@kamsiexpress.com</span></p>
                     <p>Phone: <span>+1 908 275 3675, +1 848 628 0207</span></p>
                 </div>
@@ -117,3 +117,108 @@ function toggleMenu() {
     hamburger.classList.toggle('active');
     navMenu.classList.toggle('active');
 }
+
+// Scroll-triggered animations using Intersection Observer
+// This ensures content appears on all pages
+document.addEventListener('DOMContentLoaded', function() {
+    // Wait a bit for components to be injected
+    setTimeout(function() {
+        // Create Intersection Observer
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animated');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+        
+        // Check if element is already in or near viewport on page load
+        function isInViewport(element) {
+            const rect = element.getBoundingClientRect();
+            const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+            const windowWidth = window.innerWidth || document.documentElement.clientWidth;
+            
+            // More lenient check: element is visible (even partially) or within 200px of viewport
+            // This ensures content that's already visible on page load gets animated immediately
+            return (
+                rect.top < windowHeight + 200 && // Element is visible or just above viewport
+                rect.bottom > -200 && // Element is visible or just below viewport
+                rect.left < windowWidth + 200 &&
+                rect.right > -200
+            );
+        }
+        
+        // Helper function to check if element is inside navbar or footer
+        function isInNavbarOrFooter(element) {
+            return element.closest('.navbar') !== null || element.closest('footer') !== null;
+        }
+        
+        // Observe all elements that should animate on scroll
+        const animateElements = document.querySelectorAll(`
+            h1, h2, h3, h4, h5, h6,
+            p, li,
+            img,
+            .feature-card,
+            .service-card,
+            .service-card2,
+            .service-item,
+            .image-card,
+            .Warehousing,
+            .air,
+            .ocean,
+            .Operations-box,
+            .Operations-container,
+            .about-wirteup,
+            .about-pic,
+            .write-image,
+            .world-class-list > *,
+            .number-grid > *,
+            .Testimonials-about,
+            .happy-customer > *,
+            .guaranteed-oppacity,
+            .services-grid > *,
+            .feature-tiles > *,
+            .section-writeup,
+            .section-three > *,
+            .world-class,
+            .services-hero__content,
+            .services-intro,
+            .choice-section,
+            .affordable,
+            .timely,
+            .rate
+        `);
+        
+        animateElements.forEach(el => {
+            // Only observe if element exists, is in the DOM, and not in navbar/footer
+            if (el && el.offsetParent !== null && !isInNavbarOrFooter(el)) {
+                // If element is already in viewport, animate immediately
+                if (isInViewport(el)) {
+                    setTimeout(() => {
+                        el.classList.add('animated');
+                    }, 100);
+                } else {
+                    observer.observe(el);
+                }
+            }
+        });
+        
+        // Fallback: After a longer delay, animate any remaining visible elements
+        // This catches elements that might have been missed due to timing issues
+        setTimeout(function() {
+            animateElements.forEach(el => {
+                if (el && el.offsetParent !== null && !isInNavbarOrFooter(el) && !el.classList.contains('animated')) {
+                    if (isInViewport(el)) {
+                        el.classList.add('animated');
+                    }
+                }
+            });
+        }, 500);
+    }, 100); // Small delay to ensure DOM is ready
+});
