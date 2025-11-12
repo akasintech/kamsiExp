@@ -8,14 +8,15 @@ const navComponent = `
                     <span class="logo-name logo">
                         <i class="fas fa-rocket"></i>
                         <div style="display: flex; flex-direction: column;">
-                            <span style="color: #1e3a8a;">
-                               Kamsi<span style="color: #ff4500;">express</span> 
+                            <span style="color: #1e3a8a; opacity: 1;">
+                               Kamsi<span style="color: #ff4500; opacity: 1;">express</span> 
                             </span>
-                        <span class="logo-tagline">WORLD CLASS SHIPPING SERVICE</span> 
+                        <span class="logo-tagline" style="opacity: 1;">WORLD CLASS SHIPPING SERVICE</span> 
                         </div>
                 </span>
                 </div>
             </a>
+            <input type='checkbox' id="toggle" style='display: none'>
 
             <ul class="nav-menu" id="nav-menu">
             <li><a href="index.html" class="${window.location.pathname.includes('/index.html')  ? 'nav-link active' : 'nav-link'}">Home</a></li>
@@ -36,11 +37,11 @@ const navComponent = `
                 <li><a href="contact.html" class="${window.location.pathname.includes('/contact.html') || window.location.pathname.includes('/contact') ? 'nav-link active' : 'nav-link'}">Contact Us</a></li>
             </ul>
 
-            <button class="hamburger" id='hamburger' onclick="toggleMenu()">
+            <label for='toggle' class="hamburger" id='hamburger'>
                 <span></span>
                 <span></span>
                 <span></span>
-            </button>
+            </label>
         </div>        
                 `
 nav.innerHTML = navComponent  
@@ -50,15 +51,15 @@ const footerComponent = `
         <div class="footer-content">
             <div class="footer-column">
                 <div class="footer-logo">
-                    <a href="index.html" class="logo track-logo">
+                    <a href="index.html" class="logo track-logo" style="opacity: 1;">
                         <div class="logo-text">
                             <span class="logo-name logo">
                                 <i class="fas fa-rocket"></i>
-                                <div style="display: flex; flex-direction: column; align-items: start;">
-                                    <span style="color: #1e3a8a;">
-                                       Kamsi<span style="color: #ff4500;">express</span> 
+                                <div style="opacity: 1; display: flex; flex-direction: column; align-items: start;">
+                                    <span style="color: #1e3a8a; opacity: 1;">
+                                       Kamsi<span style="color: #ff4500; opacity: 1;">express</span> 
                                     </span>
-                                <span class="logo-tagline" style="font-size: 0.6rem;">WORLD CLASS SHIPPING SERVICE</span> 
+                                <span class="logo-tagline" style="font-size: 0.6rem; opacity: 1;">WORLD CLASS SHIPPING SERVICE</span> 
                                 </div>
                         </span>
                         </div>
@@ -68,7 +69,7 @@ const footerComponent = `
       
                     <p>5900 NW 97th Ave unit 1, Miami, FL 33178, United States</span></p>
                     <p>Email: <span>info@kamsiexpress.com</span></p>
-                    <p>Phone: <span>+1 908 275 3675, +1 848 628 0207</span></p>
+                    <p>Phone: <span>+1 (810) 357‑1487</span></p>
                 </div>
             </div>
             <div class="footer-column">
@@ -110,115 +111,58 @@ const footerComponent = `
 
 footer.innerHTML = footerComponent
 
-function toggleMenu() {
-    const hamburger = document.getElementById('hamburger');
-    const navMenu = document.getElementById('nav-menu');
-    console.log(hamburger, navMenu);
-    hamburger.classList.toggle('active');
-    navMenu.classList.toggle('active');
+// Chatbot HTML Component
+function initChatbotComponent() {
+    // Check if current page is admin or login
+    const path = window.location.pathname.toLowerCase();
+    const isAdminPage = path.includes('/admin/admin.html') || path.includes('/admin/login.html');
+    
+    // Don't add chatbot on admin/login pages
+    if (isAdminPage) {
+        return;
+    }
+
+    // Create chatbot container
+    const chatbotContainer = document.createElement('div');
+    chatbotContainer.id = 'chatbot-container';
+    chatbotContainer.innerHTML = `
+        <button id="chatbot-button" class="chatbot-button" aria-label="Open customer care chatbot">
+            <i class="fab fa-whatsapp"></i>
+        </button>
+        <div id="chatbot-window" class="chatbot-window">
+            <div id="chatbot-header" class="chatbot-header">
+                <div class="chatbot-header-title">
+                    <i class="fab fa-whatsapp"></i>
+                    <h3>Customer Care</h3>
+                </div>
+                <button id="chatbot-close" class="chatbot-close" aria-label="Close chatbot">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="chatbot-messages" class="chatbot-messages"></div>
+            <div id="chatbot-input-container" class="chatbot-input-container">
+                <input 
+                    type="text" 
+                    id="chatbot-input" 
+                    class="chatbot-input" 
+                    placeholder="Type your message..."
+                    aria-label="Type your message"
+                />
+                <button id="chatbot-send" class="chatbot-send" aria-label="Send message">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(chatbotContainer);
+    
+    // Load chatbot script
+    const chatbotScript = document.createElement('script');
+    chatbotScript.src = 'chatbot.js';
+    chatbotScript.async = true;
+    document.body.appendChild(chatbotScript);
 }
 
-// Scroll-triggered animations using Intersection Observer
-// This ensures content appears on all pages
-document.addEventListener('DOMContentLoaded', function() {
-    // Wait a bit for components to be injected
-    setTimeout(function() {
-        // Create Intersection Observer
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-        
-        const observer = new IntersectionObserver(function(entries) {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animated');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
-        
-        // Check if element is already in or near viewport on page load
-        function isInViewport(element) {
-            const rect = element.getBoundingClientRect();
-            const windowHeight = window.innerHeight || document.documentElement.clientHeight;
-            const windowWidth = window.innerWidth || document.documentElement.clientWidth;
-            
-            // More lenient check: element is visible (even partially) or within 200px of viewport
-            // This ensures content that's already visible on page load gets animated immediately
-            return (
-                rect.top < windowHeight + 200 && // Element is visible or just above viewport
-                rect.bottom > -200 && // Element is visible or just below viewport
-                rect.left < windowWidth + 200 &&
-                rect.right > -200
-            );
-        }
-        
-        // Helper function to check if element is inside navbar or footer
-        function isInNavbarOrFooter(element) {
-            return element.closest('.navbar') !== null || element.closest('footer') !== null;
-        }
-        
-        // Observe all elements that should animate on scroll
-        const animateElements = document.querySelectorAll(`
-            h1, h2, h3, h4, h5, h6,
-            p, li,
-            img,
-            .feature-card,
-            .service-card,
-            .service-card2,
-            .service-item,
-            .image-card,
-            .Warehousing,
-            .air,
-            .ocean,
-            .Operations-box,
-            .Operations-container,
-            .about-wirteup,
-            .about-pic,
-            .write-image,
-            .world-class-list > *,
-            .number-grid > *,
-            .Testimonials-about,
-            .happy-customer > *,
-            .guaranteed-oppacity,
-            .services-grid > *,
-            .feature-tiles > *,
-            .section-writeup,
-            .section-three > *,
-            .world-class,
-            .services-hero__content,
-            .services-intro,
-            .choice-section,
-            .affordable,
-            .timely,
-            .rate
-        `);
-        
-        animateElements.forEach(el => {
-            // Only observe if element exists, is in the DOM, and not in navbar/footer
-            if (el && el.offsetParent !== null && !isInNavbarOrFooter(el)) {
-                // If element is already in viewport, animate immediately
-                if (isInViewport(el)) {
-                    setTimeout(() => {
-                        el.classList.add('animated');
-                    }, 100);
-                } else {
-                    observer.observe(el);
-                }
-            }
-        });
-        
-        // Fallback: After a longer delay, animate any remaining visible elements
-        // This catches elements that might have been missed due to timing issues
-        setTimeout(function() {
-            animateElements.forEach(el => {
-                if (el && el.offsetParent !== null && !isInNavbarOrFooter(el) && !el.classList.contains('animated')) {
-                    if (isInViewport(el)) {
-                        el.classList.add('animated');
-                    }
-                }
-            });
-        }, 500);
-    }, 100); // Small delay to ensure DOM is ready
-});
+// Initialize chatbot component
+initChatbotComponent();

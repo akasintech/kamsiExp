@@ -53,52 +53,6 @@
             let autoPlayInterval;
             let isAutoPlaying = true;
             
-            // Function to animate carousel caption elements
-            function animateCaption(caption) {
-                if (!caption) return;
-                
-                // Reset all caption elements to initial state
-                const h3 = caption.querySelector('h3');
-                const p = caption.querySelector('p');
-                const button = caption.querySelector('button');
-                
-                if (h3) {
-                    h3.style.opacity = '0';
-                    h3.style.transform = 'translateY(-30px)';
-                }
-                if (p) {
-                    p.style.opacity = '0';
-                    p.style.transform = 'translateY(30px)';
-                }
-                if (button) {
-                    button.style.opacity = '0';
-                    button.style.transform = 'scale(0.9)';
-                }
-                
-                // Animate them in sequence
-                setTimeout(() => {
-                    caption.style.opacity = '1';
-                    if (h3) {
-                        setTimeout(() => {
-                            h3.style.opacity = '1';
-                            h3.style.transform = 'translateY(0)';
-                        }, 200);
-                    }
-                    if (p) {
-                        setTimeout(() => {
-                            p.style.opacity = '1';
-                            p.style.transform = 'translateY(0)';
-                        }, 400);
-                    }
-                    if (button) {
-                        setTimeout(() => {
-                            button.style.opacity = '1';
-                            button.style.transform = 'scale(1)';
-                        }, 600);
-                    }
-                }, 100);
-            }
-            
             // Function to update carousel position
             function updateCarousel() {
                 carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
@@ -112,13 +66,6 @@
                             indicator.classList.remove('active');
                         }
                     });
-                }
-                
-                // Animate the caption for the current active item
-                const activeItem = carouselItems[currentIndex];
-                if (activeItem) {
-                    const caption = activeItem.querySelector('.carousel-caption');
-                    animateCaption(caption);
                 }
             }
             
@@ -186,15 +133,6 @@
             
             // Initialize auto-play
             startAutoPlay();
-            
-            // Animate the initial carousel item's caption on page load
-            setTimeout(() => {
-                const initialItem = carouselItems[currentIndex];
-                if (initialItem) {
-                    const caption = initialItem.querySelector('.carousel-caption');
-                    animateCaption(caption);
-                }
-            }, 300);
         });
 
         
@@ -282,11 +220,11 @@
         });
         
         // Scroll-triggered animations using Intersection Observer
-        document.addEventListener('DOMContentLoaded', function() {
+        function initScrollAnimations() {
             // Create Intersection Observer
             const observerOptions = {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
+                threshold: 0.05,
+                rootMargin: '0px 0px -100px 0px'
             };
             
             const observer = new IntersectionObserver(function(entries) {
@@ -298,31 +236,27 @@
                 });
             }, observerOptions);
             
-            // Check if element is already in viewport on page load
+            // Check if element is already in viewport on page load (more lenient check)
             function isInViewport(element) {
                 const rect = element.getBoundingClientRect();
+                const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+                const windowWidth = window.innerWidth || document.documentElement.clientWidth;
                 return (
-                    rect.top >= 0 &&
-                    rect.left >= 0 &&
-                    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-                    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+                    rect.top < windowHeight * 0.9 &&
+                    rect.bottom > 0 &&
+                    rect.left < windowWidth &&
+                    rect.right > 0
                 );
             }
             
             // Helper function to check if element is inside navbar or footer
             function isInNavbarOrFooter(element) {
-                return element.closest('.navbar') !== null || element.closest('footer') !== null;
+                return element.closest('.navbar') !== null || element.closest('footer') !== null || element.closest('.track-navbar') !== null || element.closest('.track-footer') !== null;
             }
             
             // Observe all elements that should animate on scroll
             const animateElements = document.querySelectorAll(`
-                h1, h2, h3, h4, h5, h6,
-                p, li,
-                img,
-                .feature-card,
-                .service-card,
-                .service-card2,
-                .service-item,
+                img:not(.navbar img):not(footer img):not(.logo img),
                 .image-card,
                 .Warehousing,
                 .air,
@@ -337,35 +271,49 @@
                 .Testimonials-about,
                 .happy-customer > *,
                 .guaranteed-oppacity,
-                .services-grid > *,
-                .feature-tiles > *,
-                .section-writeup,
-                .section-three > *,
-                .carousel-caption,
                 .world-class,
-                .services-hero__content,
-                .services-intro,
                 .choice-section,
-                .affordable,
                 .timely,
                 .rate
             `);
             
             animateElements.forEach(el => {
                 // Only observe if element exists, is in the DOM, and not in navbar/footer
-                if (el && el.offsetParent !== null && !isInNavbarOrFooter(el)) {
+                if (el && !isInNavbarOrFooter(el)) {
                     // If element is already in viewport, animate immediately
                     if (isInViewport(el)) {
                         setTimeout(() => {
                             el.classList.add('animated');
-                        }, 100);
+                        }, 200);
                     } else {
                         observer.observe(el);
                     }
                 }
             });
             
-            // Special handling for carousel captions - they should animate when carousel item is active
+            // Fallback: Show all elements after 2 seconds if they haven't been animated yet
+            setTimeout(() => {
+                animateElements.forEach(el => {
+                    if (el && !isInNavbarOrFooter(el) && !el.classList.contains('animated')) {
+                        el.classList.add('animated');
+                    }
+                });
+            }, 2000);
+        }
+        
+        // Initialize animations when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() {
+                // Wait a bit for components.js to inject nav/footer
+                setTimeout(initScrollAnimations, 300);
+            });
+        } else {
+            // DOM already loaded, wait for components
+            setTimeout(initScrollAnimations, 500);
+        }
+        
+        // Special handling for carousel captions - they should animate when carousel item is active
+        function initCarouselAnimations() {
             const carouselItems = document.querySelectorAll('.carousel-item');
             if (carouselItems.length > 0) {
                 const carouselObserver = new IntersectionObserver(function(entries) {
@@ -402,12 +350,55 @@
                             }
                         }
                     });
-                }, { threshold: 0.5 });
+                }, { threshold: 0.3 });
                 
                 carouselItems.forEach(item => {
                     carouselObserver.observe(item);
                 });
+                
+                // Animate first visible carousel item immediately
+                const firstItem = carouselItems[0];
+                if (firstItem) {
+                    const caption = firstItem.querySelector('.carousel-caption');
+                    if (caption) {
+                        setTimeout(() => {
+                            caption.classList.add('animated');
+                            caption.style.opacity = '1';
+                            const h3 = caption.querySelector('h3');
+                            const p = caption.querySelector('p');
+                            const button = caption.querySelector('button');
+                            
+                            if (h3) {
+                                setTimeout(() => {
+                                    h3.style.opacity = '1';
+                                    h3.style.transform = 'translateY(0)';
+                                }, 200);
+                            }
+                            if (p) {
+                                setTimeout(() => {
+                                    p.style.opacity = '1';
+                                    p.style.transform = 'translateY(0)';
+                                }, 400);
+                            }
+                            if (button) {
+                                setTimeout(() => {
+                                    button.style.opacity = '1';
+                                    button.style.transform = 'scale(1)';
+                                }, 600);
+                            }
+                        }, 500);
+                    }
+                }
             }
-        });
+        }
+        
+        // Initialize carousel animations
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() {
+                setTimeout(initCarouselAnimations, 300);
+            });
+        } else {
+            setTimeout(initCarouselAnimations, 500);
+        }
         
         
