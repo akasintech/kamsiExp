@@ -1341,11 +1341,14 @@
                 top: -50px;
                 display: grid;
                 position: relative;
+                padding: 20px;
             }
             .Operations-container{
                 top: -50px;
                 position: relative;
                 display: grid;
+                padding: 20px;
+                
             }
             .about{
                 /* padding: 15px; */
