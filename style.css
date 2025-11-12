@@ -661,7 +661,7 @@
             display: flex;
         }
         .about-wirteup{
-            padding: 30px 20px;
+            padding: 30px 80px;
             /* background-color: var(--light-color); */
         }
         .about-wirteup button{
@@ -1228,16 +1228,14 @@
                 flex-direction: column;
                 /* grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); */
             }
-            .about-wirteup{
-                padding: 15px;
-                background-color: var(--light-color);
-            }
+            
             .about-wirteup button{
                 border: none;
                 padding: 0px 0px;
             }
             .about-wirteup{
                 min-height: 30vh;
+                padding: 30px 20px;
             }
             .about-pic{
                 min-height: 30vh;
