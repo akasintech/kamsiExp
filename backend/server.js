@@ -74,31 +74,112 @@ mailTransporter
     console.error("Email config summary:", summary);
   });
 
-async function sendStatusEmail({ to, trackingId, oldStatus, newStatus, receiverName }) {
-  if (!to) return;
-  try {
-    const subject = `Update: Package ${trackingId} is now ${newStatus}`;
-    const html = `
-      <div style="font-family:Segoe UI,Arial,sans-serif;font-size:14px;color:#0f172a">
-        <h2 style="margin:0 0 12px;color:#111827">Cargo Delivery Update</h2>
-        <p>Hi ${receiverName || "there"},</p>
-        <p>The status of your package with tracking ID <strong>${trackingId.toUpperCase()}</strong> has changed.</p>
-        <p><strong>Previous:</strong> ${oldStatus || "N/A"}<br/>
-           <strong>Now:</strong> ${newStatus}</p>
-        <p>We'll keep you updated on further progress.</p>
-        <p style="margin-top:20px;color:#6b7280">This is an automated message.</p>
+// 📧 Send ready-to-ship email to both sender and receiver
+async function sendReadyToShipEmail({ trackingId, senderName, senderEmail, receiverName, receiverEmail, packageDesc, dispatchLocation, dispatchDate, estimatedArrivalDate }) {
+  const subject = `Package Ready to Ship - Tracking ID: ${trackingId.toUpperCase()}`;
+  const baseHtml = `
+    <div style="font-family:Segoe UI,Arial,sans-serif;font-size:14px;color:#0f172a;max-width:600px;margin:0 auto">
+      <div style="background:#1e40af;color:white;padding:20px;border-radius:8px 8px 0 0">
+        <h2 style="margin:0;color:white">📦 Package Ready to Ship</h2>
       </div>
-    `;
+      <div style="background:#f9fafb;padding:24px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 8px 8px">
+        <p style="margin:0 0 16px;font-size:16px;color:#111827">Your package is ready to be shipped!</p>
+        <div style="background:white;padding:16px;border-radius:6px;margin:16px 0;border:1px solid #e5e7eb">
+          <p style="margin:0 0 8px"><strong>Tracking ID:</strong> <span style="font-family:monospace;font-size:18px;color:#1e40af;font-weight:bold">${trackingId.toUpperCase()}</span></p>
+          ${packageDesc ? `<p style="margin:8px 0"><strong>Package Description:</strong> ${packageDesc}</p>` : ''}
+          ${dispatchLocation ? `<p style="margin:8px 0"><strong>Dispatch Location:</strong> ${dispatchLocation}</p>` : ''}
+          ${dispatchDate ? `<p style="margin:8px 0"><strong>Dispatch Date:</strong> ${new Date(dispatchDate).toLocaleDateString()}</p>` : ''}
+          ${estimatedArrivalDate ? `<p style="margin:8px 0"><strong>Estimated Arrival:</strong> ${new Date(estimatedArrivalDate).toLocaleDateString()}</p>` : ''}
+        </div>
+        <p style="margin:16px 0;color:#374151">You can track your package using the tracking ID above on our website.</p>
+        <p style="margin:16px 0 0;color:#6b7280;font-size:12px">This is an automated message. Please do not reply to this email.</p>
+      </div>
+    </div>
+  `;
 
-    await mailTransporter.sendMail({
-      from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
-      to,
-      subject,
-      html,
-    });
-    console.log(`Status email sent to ${to} for ${trackingId}`);
-  } catch (err) {
-    console.error("Failed to send status email:", err.message);
+  // Send to sender
+  if (senderEmail) {
+    try {
+      await mailTransporter.sendMail({
+        from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
+        to: senderEmail,
+        subject: subject,
+        html: baseHtml.replace('Your package', `Hi ${senderName || 'there'},<br/><br/>Your package`),
+      });
+      console.log(`✅ Ready-to-ship email sent to sender ${senderEmail} for ${trackingId}`);
+    } catch (err) {
+      console.error(`❌ Failed to send ready-to-ship email to sender:`, err.message);
+    }
+  }
+
+  // Send to receiver
+  if (receiverEmail && receiverEmail !== senderEmail) {
+    try {
+      await mailTransporter.sendMail({
+        from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
+        to: receiverEmail,
+        subject: subject,
+        html: baseHtml.replace('Your package', `Hi ${receiverName || 'there'},<br/><br/>Your package`),
+      });
+      console.log(`✅ Ready-to-ship email sent to receiver ${receiverEmail} for ${trackingId}`);
+    } catch (err) {
+      console.error(`❌ Failed to send ready-to-ship email to receiver:`, err.message);
+    }
+  }
+}
+
+// 📧 Send status change email to both sender and receiver
+async function sendStatusEmail({ trackingId, oldStatus, newStatus, senderName, senderEmail, receiverName, receiverEmail, packageDesc }) {
+  const subject = `Package Status Update - ${trackingId.toUpperCase()}`;
+  const baseHtml = `
+    <div style="font-family:Segoe UI,Arial,sans-serif;font-size:14px;color:#0f172a;max-width:600px;margin:0 auto">
+      <div style="background:#1e40af;color:white;padding:20px;border-radius:8px 8px 0 0">
+        <h2 style="margin:0;color:white">📦 Package Status Update</h2>
+      </div>
+      <div style="background:#f9fafb;padding:24px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 8px 8px">
+        <p style="margin:0 0 16px;font-size:16px;color:#111827">The status of your package has been updated.</p>
+        <div style="background:white;padding:16px;border-radius:6px;margin:16px 0;border:1px solid #e5e7eb">
+          <p style="margin:0 0 8px"><strong>Tracking ID:</strong> <span style="font-family:monospace;font-size:18px;color:#1e40af;font-weight:bold">${trackingId.toUpperCase()}</span></p>
+          ${packageDesc ? `<p style="margin:8px 0"><strong>Package:</strong> ${packageDesc}</p>` : ''}
+          <div style="margin:16px 0;padding:12px;background:#fef3c7;border-left:4px solid #f59e0b;border-radius:4px">
+            <p style="margin:0 0 4px"><strong>Previous Status:</strong> <span style="color:#6b7280">${oldStatus || "N/A"}</span></p>
+            <p style="margin:4px 0 0"><strong>Current Status:</strong> <span style="color:#059669;font-weight:bold">${newStatus}</span></p>
+          </div>
+        </div>
+        <p style="margin:16px 0;color:#374151">We'll keep you updated on further progress.</p>
+        <p style="margin:16px 0 0;color:#6b7280;font-size:12px">This is an automated message. Please do not reply to this email.</p>
+      </div>
+    </div>
+  `;
+
+  // Send to sender
+  if (senderEmail) {
+    try {
+      await mailTransporter.sendMail({
+        from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
+        to: senderEmail,
+        subject: subject,
+        html: baseHtml.replace('The status of your package', `Hi ${senderName || 'there'},<br/><br/>The status of your package`),
+      });
+      console.log(`✅ Status email sent to sender ${senderEmail} for ${trackingId}`);
+    } catch (err) {
+      console.error(`❌ Failed to send status email to sender:`, err.message);
+    }
+  }
+
+  // Send to receiver
+  if (receiverEmail && receiverEmail !== senderEmail) {
+    try {
+      await mailTransporter.sendMail({
+        from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
+        to: receiverEmail,
+        subject: subject,
+        html: baseHtml.replace('The status of your package', `Hi ${receiverName || 'there'},<br/><br/>The status of your package`),
+      });
+      console.log(`✅ Status email sent to receiver ${receiverEmail} for ${trackingId}`);
+    } catch (err) {
+      console.error(`❌ Failed to send status email to receiver:`, err.message);
+    }
   }
 }
 
@@ -195,6 +276,19 @@ app.post("/api/add-tracking-id", authMiddleware, async (req, res) => {
 
     console.log("✅ Data saved with tracking ID:", trackingId);
 
+    // Send ready-to-ship email to both sender and receiver
+    await sendReadyToShipEmail({
+      trackingId,
+      senderName,
+      senderEmail,
+      receiverName,
+      receiverEmail,
+      packageDesc,
+      dispatchLocation,
+      dispatchDate,
+      estimatedArrivalDate,
+    });
+
     res.json({
       success: true,
       trackingId,
@@ -265,14 +359,17 @@ app.put("/api/update/:trackingId", authMiddleware, async (req, res) => {
     // Fetch updated doc to get latest email/status
     const updated = await collection.findOne({ trackingId });
 
-    // If status changed, send email to receiver
+    // If status changed, send email to both sender and receiver
     if (existing && updated && updateData.status && existing.status !== updated.status) {
       await sendStatusEmail({
-        to: updated.receiverEmail,
         trackingId,
         oldStatus: existing.status,
         newStatus: updated.status,
+        senderName: updated.senderName,
+        senderEmail: updated.senderEmail,
         receiverName: updated.receiverName,
+        receiverEmail: updated.receiverEmail,
+        packageDesc: updated.packageDesc,
       });
     }
 

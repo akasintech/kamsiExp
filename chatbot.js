@@ -2,7 +2,7 @@
 (function() {
     'use strict';
 
-    // WhatsApp number: +1 (810) 357‑1487
+    // WhatsApp number: +1 (810) 357-1487
     const WHATSAPP_NUMBER = '18103571487';
     const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
 

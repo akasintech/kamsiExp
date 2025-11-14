@@ -315,7 +315,16 @@ cancelEditBtn.addEventListener('click', closeEditModalFunc);
 
 // Submit Edit Form
 editTrackingForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
+    e.preventDefault();
+
+    const submitButton = editTrackingForm.querySelector('button[type="submit"]');
+    const originalButtonText = submitButton.textContent;
+    
+    // Disable button and show loader
+    submitButton.disabled = true;
+    submitButton.innerHTML = '<span class="button-loader"></span> Updating...';
+    submitButton.style.cursor = 'not-allowed';
+    submitButton.style.opacity = '0.7';
 
     const formData = new FormData(editTrackingForm);
     const trackingId = formData.get('trackingId');
@@ -339,6 +348,11 @@ editTrackingForm.addEventListener('submit', async (e) => {
 
         if (!response.ok) {
             if (response.status === 401 || result.message?.toLowerCase().includes('unauthorized')) {
+                // Re-enable button before logout
+                submitButton.disabled = false;
+                submitButton.textContent = originalButtonText;
+                submitButton.style.cursor = 'pointer';
+                submitButton.style.opacity = '1';
                 logout();
                 return;
             }
@@ -349,18 +363,40 @@ editTrackingForm.addEventListener('submit', async (e) => {
         closeEditModalFunc();
         fetchAllRecords();
     } catch (error) {
-        if (handleUnauthorized(error)) return;
+        if (handleUnauthorized(error)) {
+            // Re-enable button before logout
+            submitButton.disabled = false;
+            submitButton.textContent = originalButtonText;
+            submitButton.style.cursor = 'pointer';
+            submitButton.style.opacity = '1';
+            return;
+        }
         showToast(`Error: ${error.message}`, 'error');
         console.error('Error updating record:', error);
+    } finally {
+        // Re-enable button and restore original text
+        submitButton.disabled = false;
+        submitButton.textContent = originalButtonText;
+        submitButton.style.cursor = 'pointer';
+        submitButton.style.opacity = '1';
     }
 });
 
 // Submit Add Tracking Form
 addTrackingForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
+    e.preventDefault();
+
+    const submitButton = addTrackingForm.querySelector('button[type="submit"]');
+    const originalButtonText = submitButton.textContent;
+    
+    // Disable button and show loader
+    submitButton.disabled = true;
+    submitButton.innerHTML = '<span class="button-loader"></span> Adding...';
+    submitButton.style.cursor = 'not-allowed';
+    submitButton.style.opacity = '0.7';
 
     const formData = new FormData(addTrackingForm);
-      const data = Object.fromEntries(formData);
+    const data = Object.fromEntries(formData);
 
     try {
         const response = await fetch(`${API_BASE_URL}/add-tracking-id`, {
@@ -373,6 +409,11 @@ addTrackingForm.addEventListener('submit', async (e) => {
 
         if (!response.ok) {
             if (response.status === 401 || result.message?.toLowerCase().includes('unauthorized')) {
+                // Re-enable button before logout
+                submitButton.disabled = false;
+                submitButton.textContent = originalButtonText;
+                submitButton.style.cursor = 'pointer';
+                submitButton.style.opacity = '1';
                 logout();
                 return;
             }
@@ -386,9 +427,22 @@ addTrackingForm.addEventListener('submit', async (e) => {
         document.querySelector('[data-tab="dashboard"]').click();
         setTimeout(() => fetchAllRecords(), 300);
     } catch (error) {
-        if (handleUnauthorized(error)) return;
+        if (handleUnauthorized(error)) {
+            // Re-enable button before logout
+            submitButton.disabled = false;
+            submitButton.textContent = originalButtonText;
+            submitButton.style.cursor = 'pointer';
+            submitButton.style.opacity = '1';
+            return;
+        }
         showToast(`Error: ${error.message}`, 'error');
         console.error('Error adding tracking record:', error);
+    } finally {
+        // Re-enable button and restore original text
+        submitButton.disabled = false;
+        submitButton.textContent = originalButtonText;
+        submitButton.style.cursor = 'pointer';
+        submitButton.style.opacity = '1';
     }
 });
 

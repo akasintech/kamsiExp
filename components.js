@@ -2,7 +2,7 @@ const footer = document.getElementById('footer')
 const nav = document.getElementById('nav')
 
 const navComponent = `
-                <div class="container nav-container">
+                <div class="container nav-container" style='z-index: 2000;'>
             <a href="index.html" class="logo track-logo">
                 <div class="logo-text">
                     <span class="logo-name logo">
@@ -21,10 +21,10 @@ const navComponent = `
             <ul class="nav-menu" id="nav-menu">
             <li><a href="index.html" class="${window.location.pathname.includes('/index.html')  ? 'nav-link active' : 'nav-link'}">Home</a></li>
                 <li class="nav-item-dropdown">
-                    <a href="about.html" class="${window.location.pathname.includes('/about.html') || window.location.pathname.includes('/about') || window.location.pathname.includes('/warehouse') || window.location.pathname.includes('/logistics') || window.location.pathname.includes('/company-name') ? 'nav-link active has-dropdown' : 'nav-link has-dropdown'}">
+                    <div href="about.html" class="${window.location.pathname.includes('/about.html') || window.location.pathname.includes('/about') || window.location.pathname.includes('/warehouse') || window.location.pathname.includes('/logistics') || window.location.pathname.includes('/company-name') ? 'nav-link active has-dropdown' : 'nav-link has-dropdown'}">
                         About Us <i class="fas fa-chevron-down" style="font-size: 10px;"></i>
-                    </a>
-                    <ul class="dropdown-menu">
+                    </div>
+                    <ul class="dropdown-menu" style='z-index: 1000; '>
                         <li><a href="about.html">About Us</a></li>
                         <li><a href="warehouse.html">Warehousing</a></li>
                         <li><a href="logistics.html">Logistics</a></li>
@@ -69,7 +69,7 @@ const footerComponent = `
       
                     <p>5900 NW 97th Ave unit 1, Miami, FL 33178, United States</span></p>
                     <p>Email: <span>info@kamsiexpress.com</span></p>
-                    <p>Phone: <span>+1 (810) 357‑1487</span></p>
+                    <p>Phone: <span>+48 669 545 804</span><br><span>+1 (810) 357-1487</span></p>
                 </div>
             </div>
             <div class="footer-column">
