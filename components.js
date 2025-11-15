@@ -127,12 +127,12 @@ function initChatbotComponent() {
     chatbotContainer.id = 'chatbot-container';
     chatbotContainer.innerHTML = `
         <button id="chatbot-button" class="chatbot-button" aria-label="Open customer care chatbot">
-            <i class="fab fa-whatsapp"></i>
+            <i class="fas fa-headset"></i>
         </button>
         <div id="chatbot-window" class="chatbot-window">
             <div id="chatbot-header" class="chatbot-header">
                 <div class="chatbot-header-title">
-                    <i class="fab fa-whatsapp"></i>
+                    <i class="fas fa-headset"></i>
                     <h3>Customer Care</h3>
                 </div>
                 <button id="chatbot-close" class="chatbot-close" aria-label="Close chatbot">

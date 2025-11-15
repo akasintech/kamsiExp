@@ -201,7 +201,7 @@
 /* Footer */
 .track-footer {
     background-color: white;
-    padding: 50px 20px 20px;
+    padding: 50px 80px;
     margin-top: 60px;
 }
 
@@ -385,7 +385,10 @@
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 576px) {
+    .track-footer{
+        padding: 30px 20px;
+    }
     .hero-title {
         font-size: 28px;
     }
@@ -420,10 +423,10 @@
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    background-color: #25D366;
+    background-color: white;
     border: none;
     cursor: pointer;
-    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -432,9 +435,9 @@
 }
 
 .chatbot-button:hover {
-    background-color: #20BA5A;
+    background-color: white;
     transform: scale(1.1);
-    box-shadow: 0 6px 16px rgba(37, 211, 102, 0.5);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
 }
 
 .chatbot-button-hidden {
@@ -444,7 +447,7 @@
 }
 
 .chatbot-button i {
-    color: white;
+    color: var(--secondary-color);
     font-size: 28px;
 }
 
@@ -473,7 +476,7 @@
 }
 
 .chatbot-header {
-    background: linear-gradient(135deg, #25D366 0%, #20BA5A 100%);
+    background: linear-gradient(135deg, var(--secondary-color) 0%, #ea580c 100%);
     color: white;
     padding: 16px 20px;
     display: flex;
@@ -563,7 +566,7 @@
 }
 
 .chatbot-message-user .chatbot-message-text {
-    background-color: #25D366;
+    background-color: var(--secondary-color);
     color: white;
     border-bottom-right-radius: 4px;
 }
@@ -596,14 +599,14 @@
 }
 
 .chatbot-input:focus {
-    border-color: #25D366;
+    border-color: var(--secondary-color);
 }
 
 .chatbot-send {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background-color: #25D366;
+    background-color: var(--secondary-color);
     border: none;
     color: white;
     cursor: pointer;
@@ -615,7 +618,7 @@
 }
 
 .chatbot-send:hover {
-    background-color: #20BA5A;
+    background-color: #ea580c;
 }
 
 .chatbot-send:active {

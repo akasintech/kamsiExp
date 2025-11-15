@@ -2,9 +2,8 @@
 (function() {
     'use strict';
 
-    // WhatsApp number: +1 (810) 357-1487
-    const WHATSAPP_NUMBER = '18103571487';
-    const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
+    // Company email
+    const COMPANY_EMAIL = 'info@kamsiexpress.com';
 
     // Check if current page is admin or login
     function isAdminOrLoginPage() {
@@ -81,7 +80,7 @@
             chatbotButton.classList.remove('chatbot-button-hidden');
         }
 
-        // Send message and redirect to WhatsApp
+        // Send message and redirect to email
         function sendMessage() {
             const message = chatbotInput.value.trim();
             
@@ -97,13 +96,14 @@
 
             // Show redirect message
             setTimeout(() => {
-                addMessage('Please continue the discussion on WhatsApp with our customer care team. Redirecting you now...', 'bot');
+                addMessage('Opening your email app to contact us...', 'bot');
                 
-                // Open WhatsApp after a short delay
+                // Open email app with user's message
                 setTimeout(() => {
-                    const encodedMessage = encodeURIComponent(message);
-                    const whatsappLink = `${WHATSAPP_URL}?text=${encodedMessage}`;
-                    window.open(whatsappLink, '_blank');
+                    const subject = encodeURIComponent('Inquiry from KamsiExpress Website');
+                    const body = encodeURIComponent(`Hello,\n\nI would like to get in touch regarding:\n\n${message}\n\n`);
+                    const mailtoLink = `mailto:${COMPANY_EMAIL}?subject=${subject}&body=${body}`;
+                    window.location.href = mailtoLink;
                 }, 1500);
             }, 500);
         }
@@ -121,7 +121,6 @@
             }
         });
 
-        // Close on outside click (optional - can be removed if not needed)
         chatbotWindow.addEventListener('click', function(e) {
             if (e.target === chatbotWindow) {
                 closeChatbot();

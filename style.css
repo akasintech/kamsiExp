@@ -710,7 +710,7 @@
             min-width: 100%;
             display: grid;
             gap: 20px;
-            padding: 30px 30px;
+            padding: 30px 80px;
             grid-template-columns: repeat(auto-fit, minmax(300px, 2fr));
             /* background-color: var(--light-color); */
         }
@@ -811,7 +811,7 @@
         }
 
         .gallery-container {
-            width: 80%;
+            width: 100%;
             max-width: 1200px;
             position: relative;
             overflow: hidden;
@@ -1004,7 +1004,7 @@
             min-height: 50vh;
             min-width: 100%;
             display: grid;
-            padding: 30px 20px;
+            padding: 30px 80px;
             /* background-color: var(--light-color); */
             grid-template-columns: repeat(auto-fit, minmax(300px, 2fr));
         }
@@ -1200,6 +1200,13 @@
         }
 
         @media (max-width: 768px){
+            .world-class-list{
+                padding: 30px 20px;
+            }
+           .Testimonials{
+            padding: 30px 20px;
+           }
+            
             .main-content{
                 min-height: 30vh;
             }
