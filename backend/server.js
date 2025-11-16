@@ -23,8 +23,6 @@ app.use(
 
 // ✅ MongoDB URI
 const uri = "mongodb+srv://joynwaiwu849_db_user:Oo5p5OMPHUnJw2cT@cluster0.tnn9rnz.mongodb.net/?appName=Cluster0"
-// const uri =
-//   "mongodb+srv://charlesakachi476:xKuVtUzPnt3nCmoR@cluster0.peyi6fq.mongodb.net/?appName=Cluster0";
 
 // ✅ Create client
 const client = new MongoClient(uri, {
