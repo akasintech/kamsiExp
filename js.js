@@ -1,4 +1,5 @@
-// Mobile Menu Toggle (guarded until nav is injected by components.js)
+
+
         document.addEventListener('DOMContentLoaded', function () {
             const hamburger = document.querySelector('.hamburger');
             const navMenu = document.querySelector('.nav-menu');

@@ -1728,4 +1728,12 @@
                 padding: 30px 15px;
             }
         }
-        
+        .goog-te-banner-frame.skiptranslate {
+  display: none !important;
+}
+body {
+  top: 0 !important;
+}
+table{
+    display: none !important;
+}

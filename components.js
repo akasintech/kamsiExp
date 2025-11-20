@@ -35,7 +35,9 @@ const navComponent = `
                 <li><a href="track.html" class="${window.location.pathname.includes('/track.html') || window.location.pathname.includes('/track') ? 'nav-link active' : 'nav-link'}">Track</a></li>
                 <li><a href="resources.html" class="${window.location.pathname.includes('/resources.html') || window.location.pathname.includes('/resources') ? 'nav-link active' : 'nav-link'}">Resources</a></li>
                 <li><a href="contact.html" class="${window.location.pathname.includes('/contact.html') || window.location.pathname.includes('/contact') ? 'nav-link active' : 'nav-link'}">Contact Us</a></li>
-            </ul>
+                <li><div id="google_translate_element" style="border: 2px solid #1e40af; border-radius: 6px;"></div></li>
+
+                </ul>
 
             <label for='toggle' class="hamburger" id='hamburger'>
                 <span></span>
@@ -45,6 +47,10 @@ const navComponent = `
         </div>        
                 `
 nav.innerHTML = navComponent  
+
+
+console.log(document.getElementById('google_translate_element'));
+
 
 
 const footerComponent = `   
